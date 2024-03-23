@@ -1,0 +1,4 @@
+Name: Palestine	Code:pal	noOfWins:3	 noOfDraws: 1	 noOfLoses: 1	 GoalsDiffrence:5	 points:10
+Name: Moroco	Code:MAR	noOfWins:2	 noOfDraws: 1	 noOfLoses: 0	 GoalsDiffrence:3	 points:7
+Name: Croatia	Code:CRO	noOfWins:1	 noOfDraws: 2	 noOfLoses: 0	 GoalsDiffrence:3	 points:5
+Name: canada	Code:CAN	noOfWins:0	 noOfDraws: 0	 noOfLoses: 3	 GoalsDiffrence:0	 points:0

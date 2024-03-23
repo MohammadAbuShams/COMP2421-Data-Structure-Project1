@@ -1,0 +1,332 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+// Mohammad Abu Shams
+//1200549
+typedef struct String {
+char string[100];
+}Str;
+
+typedef struct teamNode {
+Str name;
+Str code;
+int noOfWins;
+int noOfDraws;
+int noOfLoses;
+int goalsDifference;
+int points;
+struct teamNode *Next;
+}Team;
+
+typedef struct playerNode {
+Str name;
+struct playerNode *Next;
+}Player;
+
+
+int main()
+{
+Team *L;
+L=(Team*)malloc (sizeof(Team));
+L->Next=NULL;
+ int numberofteams;
+  while (1){
+printf("\n Please select an option\n");
+printf("1-Read the file teams.txt\n");
+printf("2-calculate the points\n");
+printf("3-sort the teams\n");
+printf("4-Insert new word to the dictionary\n");
+printf("5-Save the dictionary back to the file\n");
+printf("6-Exit\n");
+printf("7-Exit\n");
+printf("8-Exit\n");
+
+int y;
+scanf("%d",&y);
+switch(y)
+{
+    case 1:
+    {
+        numberofteams=readfromfile(L);
+        printf("%d", numberofteams);
+    }
+    break;
+
+      case 2:
+    {
+calculatepoints(L);
+
+    }
+    break;
+      case 3:
+    {
+
+
+    }
+    break;
+      case 4:
+    {
+Str name;
+Str code;
+int noOfWins;
+int noOfDraws;
+int noOfLoses;
+int goalsDifference;
+printf("Enter Name:");
+scanf("%s", name.string);
+printf("Enter code:");
+scanf("%s", code.string);
+printf("Enter noOfWins:");
+scanf("%d", noOfWins);
+printf("Enter noOfDraws:");
+scanf("%d", noOfDraws);
+printf("Enter noOfLoses:");
+scanf("%d", noOfLoses);
+printf("Enter goalsDifference:");
+scanf("%d", goalsDifference);
+
+
+
+
+    addteam(L,name,code,noOfWins,noOfDraws, noOfLoses, goalsDifference);
+
+    }
+    break;
+      case 5:
+    {
+        Str code;
+
+        printf("Enter code:");
+    scanf("%s", code.string);
+        deleteteam(L, code);
+
+    }
+    break;
+      case 6:
+    {
+Str name;
+Str code;
+int noOfWins;
+int noOfDraws;
+int noOfLoses;
+int goalsDifference;
+printf("Enter Name:");
+scanf("%s", name.string);
+printf("Enter code:");
+scanf("%s", code.string);
+printf("Enter noOfWins:");
+scanf("%d", noOfWins);
+printf("Enter noOfDraws:");
+scanf("%d", noOfDraws);
+printf("Enter noOfLoses:");
+scanf("%d", noOfLoses);
+printf("Enter goalsDifference:");
+scanf("%d", goalsDifference);
+
+
+        modifyteam(L,name,code,noOfWins,noOfDraws, noOfLoses, goalsDifference);
+
+    }
+    break;
+
+
+  case 7:
+    {
+       printTeamInfo(L);
+    }
+    break;
+
+
+      case 8:
+    {
+       saveteamtofile(L);
+
+    }
+    break;
+      default :
+        {
+            printf("Please enter the numbers between 1-6");
+        }
+
+}
+}
+return 0;
+}
+void trim(char *str) { // remove all leading and trailing spaces from the string
+int len = strlen(str);
+while (isspace(str[0]) || isspace(str[len - 1])) {
+if (isspace(str[0])) //check if the first character is space
+for (int j = 0; j < len; j++) { //delete the space and shift the string to the left
+str[j] = str[j + 1];
+}
+if (isspace(str[len - 1])) // check if last character is space
+str[len - 1] = '\0';
+}
+}
+int readfromfile(Team* L) { //load passengers info and return number of passengers
+FILE *team;
+team = fopen("teams.txt", "r");
+char *token, temp[300];
+int i;
+int countteams=0;
+while (fgets(temp,300,team)) { //read the data from the file line by line
+
+trim(temp);
+token = strtok(temp, ","); //split the line into tokens according to ,
+Str name;
+Str code;
+int noOfWins;
+int noOfDraws;
+int noOfLoses;
+int goalsDifference;
+int count =0;
+while (token != NULL) { //assign each token to it's field
+if (count == 0){
+strcpy(name.string, token); //""
+trim(name.string);// To delete spaces
+}
+else if (count == 1) { //convert string to integer then split day, month and year
+
+strcpy(code.string, token); //""
+trim(code.string);// To delete spaces
+}
+
+else if (count == 2){ //assign hours then convert it to integers
+noOfWins= atoi(token);
+}
+
+
+else if (count == 3){ //assign minutes then convert it to integers
+    noOfDraws=atoi(token);
+}
+
+else if(count==4){ //assign "from" token
+    noOfLoses=atoi(token);
+
+}
+
+else if (count==5){ //assign "to" token
+    goalsDifference=atoi(token);
+}
+
+token = strtok(NULL,",");
+count++;
+}
+countteams++;
+addteam(L, name, code, noOfWins, noOfDraws, noOfLoses, goalsDifference);
+}
+
+
+
+fclose(team);
+return countteams;
+
+}
+
+void addteam(Team *L, Str name, Str code, int noOfWins, int noOfDraws, int noOfLoses, int goalsDifference)
+{
+
+    Team* newnode, * temp;
+    newnode=(Team*)malloc(sizeof (Team));
+    newnode->Next=NULL;
+
+    strcpy(newnode->name.string,name.string);
+
+    strcpy(newnode->code.string,code.string);
+
+        newnode->noOfWins=noOfWins;
+        newnode->noOfDraws=noOfDraws;
+        newnode->noOfLoses=noOfLoses;
+ newnode->goalsDifference=goalsDifference;
+     temp=L->Next;
+     while(temp->Next!=NULL){
+         temp=temp->Next;
+     }
+     temp->Next = newnode;
+
+
+}
+
+
+
+
+void calculatepoints(Team *L)
+{
+
+Team* temp;
+temp=L->Next;
+for(;temp->Next!=NULL; temp=temp->Next)
+{
+    temp->points=3*temp->noOfWins+ 1* temp->noOfDraws;
+}
+}
+
+
+void deleteteam(Team *L, Str code)
+{
+    Team* temp;
+    temp=L->Next;
+    while(temp->Next!=NULL){
+        if(strcasecmp(temp->Next->code.string,code.string)==0){
+           Team *d;
+           d = temp->Next;
+           temp->Next=d->Next;
+           free(d);
+           break;
+           }
+           temp= temp->Next;
+    }
+}
+
+void modifyteam(Team *L,Str searchName, Str name, Str code, int noOfWins, int noOfDraws, int noOfLoses, int goalsDifference)
+{
+
+    Team *temp;
+
+ temp = L->Next;
+ while(temp->Next!=NULL){
+        if(strcasecmp(temp->code.string,code.string)==0){
+            strcpy(temp->name.string,name.string);
+            strcpy(temp->code.string,code.string);
+            temp->noOfWins=noOfWins;
+            temp->noOfDraws=noOfDraws;
+            temp->noOfLoses=noOfLoses;
+            temp->goalsDifference=goalsDifference;
+            break;
+           }
+           temp= temp->Next;
+    }
+
+}
+
+void printTeamInfo(Team *L) {
+Team *P;
+P = L->Next;
+if(L->Next == NULL)
+printf("Empty list\n");
+else
+while(P != NULL){
+printf("Name: %s\tCode:%s \tnoOfWins:%d\t noOfDraws: %d\t noOfLoses: %d\t GoalsDiffrence:%d\t points:%d\n",
+P->name, P->code, P->noOfWins, P->noOfDraws, P->noOfLoses, P->goalsDifference, P->points);
+P=P->Next;
+}
+}
+
+
+void saveteamtofile(Team *L)
+{
+    FILE * output;
+    output=fopen("teamsInfo.txt","w");
+    Team *P= L->Next;
+    while(P!=NULL){
+        fprintf(output,"Name: %s\tCode:%s \tnoOfWins:%d\t noOfDraws: %d\t noOfLoses: %d\t GoalsDiffrence:%d\t points:%d\n",
+        P->name, P->code, P->noOfWins, P->noOfDraws, P->noOfLoses, P->goalsDifference, P->points);
+
+    }
+    fclose(output);
+
+}
+
+
+
+
